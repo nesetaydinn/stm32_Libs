@@ -14,21 +14,20 @@
 
 #define NA_WS2812_MAX_LED_SIZE 32
 #define NA_WS2812_LED_BRIGHT_COMPLEX 1
-
+#define NA_WS2812_DELAY_TIME 40
 typedef struct{
 	#if NA_WS2812_LED_BRIGHT_COMPLEX
 	uint32_t ledsArr[NA_WS2812_MAX_LED_SIZE][4];
 	#else
 	uint32_t ledsArr[NA_WS2812_MAX_LED_SIZE][3];
 	#endif
-	uint8_t led_arrSize;
-	uint8_t bright;
-	bool dataSendFlag;
+	TIM_HandleTypeDef *htim;
 	uint32_t htimChannel;
 	uint16_t T0H;
 	uint16_t T1H;
-
-	TIM_HandleTypeDef *htim;
+	uint8_t led_arrSize;
+	uint8_t bright;
+	bool dataSendFlag;
 }na_Ws2812;
 
 na_Ws2812  na_Ws2812_create(TIM_HandleTypeDef *htim,
@@ -45,8 +44,10 @@ void  na_Ws2812_putColorIndex(na_Ws2812* drv,uint8_t index,
 void na_Ws2812_setBright(na_Ws2812  *drv,uint8_t bright);
 #endif
 void na_Ws2812_send(na_Ws2812 *drv);
+void na_Ws2812_clean_arr(na_Ws2812  *drv);
 void na_Ws2812_setFlag(na_Ws2812  *drv,bool flag);
 bool na_Ws2812_getFlag(na_Ws2812  *drv);
+void na_Ws2812_stopDMA(na_Ws2812  *drv,TIM_HandleTypeDef *htim);
 
 
 
